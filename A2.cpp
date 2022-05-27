@@ -1,5 +1,8 @@
 /*
-	Will be updating this assignment shortly; would like to optimize a few things
+	A Program that does Date based calculations.
+	You can:
+	1. Set a Date (day, month, year)
+	2. Most importantly, can find out what the Date will be after N # of days
 */
 #include <iostream>
 #include <string>
@@ -9,30 +12,23 @@ using namespace std;
 class Date
 {
 private:
-	int day, month, year;
+	int day, month, year, yearNum = 365;
 public:
 	int monthVals[2][12] = { {1,2,3,4,5,6,7,8,9,10,11,12},
 							{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31} };
-	Date(int, int, int);
-	Date();
 	void setMonth(int);
 	void setDay(int);
 	void setYear(int);
 	int getDay() const;
 	int getMonth() const;
 	int getYear()const;
-	bool isLeap();
+	void isLeap();
 	int numDaysMonth();
 	int numberOfDaysPassed();
 	int numberOfDaysLeft();
 	void incrementDate(int);
 };
-Date::Date(int m, int d, int y)
-{
-	day = d;
-	month = m;
-	year = y;
-}
+
 void Date::setMonth(int m)
 {
 	if (m <= 12 && m >= 1)
@@ -40,13 +36,9 @@ void Date::setMonth(int m)
 		month = m;
 		return;
 	}
-	else
-	{
-		int m;
-		cout << "Error! Please enter a valid month: ";
-		cin >> m;
-		this->setMonth(m);
-	}
+	cout << "Error! Please enter a valid month: ";
+	cin >> m;
+	setMonth(m);
 }
 
 void Date::setDay(int d)
@@ -56,13 +48,9 @@ void Date::setDay(int d)
 		day = d;
 		return;
 	}
-	else
-	{
-		int d;
-		cout << "Error! Please enter a valid day: ";
-		cin >> d;
-		this->setMonth(d);
-	}
+	cout << "Error! Please enter a valid day: ";
+	cin >> d;
+	setDay(d);
 }
 
 void Date::setYear(int y)
@@ -72,13 +60,9 @@ void Date::setYear(int y)
 		year = y;
 		return;
 	}
-	else
-	{
-		int y;
-		cout << "Error! Please enter a valid year: ";
-		cin >> y;
-		this->setMonth(y);
-	}
+	cout << "Error! Please enter a valid year: ";
+	cin >> y;
+	setYear(y);
 }
 
 int Date::getDay() const
@@ -96,19 +80,22 @@ int Date::getYear() const
 	return year;
 }
 
-bool Date::isLeap()
+void Date::isLeap()
 {
 	if (((year % 4) == 0) && ((year % 100) != 0))
 	{
-		return true;
+		yearNum = 366;
 	}
-	return false;
+	else
+	{
+		yearNum = 365;
+	}
 }
 
 int Date::numDaysMonth()
 {
-	bool leap = isLeap();
-	if (leap)
+	isLeap();
+	if (yearNum == 366)
 	{
 		monthVals[1][1] = 29;
 	}
@@ -119,13 +106,14 @@ int Date::numberOfDaysPassed()
 {
 	int counter = 1;
 	int sum = 0;
-	if (this->isLeap())
+	isLeap();
+	if (yearNum == 366)
 	{
-		this->monthVals[1][1] = 29;
+		monthVals[1][1] = 29;
 	}
 	while (counter < month)
 	{
-		sum += this->monthVals[1][counter - 1];
+		sum += monthVals[1][counter - 1];
 		counter++;
 	}
 	sum += day;
@@ -135,11 +123,7 @@ int Date::numberOfDaysPassed()
 int Date::numberOfDaysLeft()
 {
 	int numDaysPassed = numberOfDaysPassed();
-	int yearNum = 365;
-	if (isLeap())
-	{
-		yearNum = 366;
-	}
+	isLeap();
 	int numDaysLeft = yearNum - numDaysPassed;
 	return numDaysLeft;
 }
@@ -152,7 +136,8 @@ int Date::numberOfDaysLeft()
 */
 void Date::incrementDate(int num)
 {
-	if (isLeap())
+	isLeap();
+	if (yearNum == 366)
 	{
 		monthVals[1][1] = 29;
 	}
@@ -191,7 +176,10 @@ int main()
 	/*
 		Please play around w/ these values!
 	*/
-	Date d(1, 18, 2004);
+	Date d;
+	d.setDay(1);
+	d.setMonth(1);
+	d.setYear(2004);
 	cout << d.getDay() << endl;
 	cout << d.numberOfDaysPassed() << endl;
 	cout << d.numberOfDaysLeft() << endl;
