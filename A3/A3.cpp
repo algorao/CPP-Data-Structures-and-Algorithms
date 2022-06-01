@@ -50,6 +50,7 @@ void DynamicStringArray::addEntry(string s)
 	size += 1;
 	delete[] dynamicArray;
 	dynamicArray = ndynamicArray;
+	ndynamicArray = nullptr;
 }
 
 void DynamicStringArray::deleteEntry(string s)
@@ -78,6 +79,7 @@ void DynamicStringArray::deleteEntry(string s)
 		size -= 1;
 		delete[] dynamicArray;
 		dynamicArray = ndynamicArray;
+		ndynamicArray = nullptr;
 	}
 	else
 	{
